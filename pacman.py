@@ -3,6 +3,10 @@ import math
 import copy
 from borders import *
 
+pellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/cheesepellet.png'), (25,25))
+superpellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/apple.JPG'), (30,30))
+
+
 class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, box, id):
         self.x_pos = x_coord
@@ -646,15 +650,9 @@ def draw_borders():
     for i in range(len(level)):
         for j in range(len(level[i])):
             if level[i][j] == 1:
-                pygame.draw.circle(screen, '#faeb7f',
-                                   (j * num2 + (0.5 * num2),
-                                    i * num1 + (0.5 * num1)),
-                                   4)
+                screen.blit(pellet_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
             if level[i][j] == 2 and not flicker:
-                pygame.draw.circle(screen, '#faeb7f',
-                                   (j * num2 + (0.5 * num2),
-                                    i * num1 + (0.5 * num1)),
-                                   10)
+                screen.blit(superpellet_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
             if level[i][j] == 3:
                 pygame.draw.line(screen, color,
                                  (j * num2 + (0.5 * num2),
@@ -933,7 +931,7 @@ if __name__ == '__main__':
             startup_counter += 1
         else:
             moving = True
-        screen.fill('#F3E5AB') #background color
+        screen.fill('#000000') #background color
         draw_borders()
         center_x = player_x + 23
         center_y = player_y + 24
