@@ -3,9 +3,11 @@ import math
 import copy
 from borders import *
 
-pellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/cheesepellet.png'), (25,25))
-superpellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/apple.JPG'), (30,30))
+pellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/cheesepellet.png'), (30, 25))
+superpellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/apple.png'), (30, 30))
 
+background_img = pygame.image.load('C:/Users/emaan/pacman/img/background.JPG')
+background_img = pygame.transform.scale(background_img, (900, 950))
 
 class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, box, id):
@@ -615,21 +617,17 @@ def draw_misc():
         screen.blit(pygame.transform.scale(
             player_images[0], (30, 30)), (650 + i * 40, 915))
     if game_over:
-        pygame.draw.rect(screen, '#00e6fc',
-                         [265, 215, 370, 120], 0, 10)
-        pygame.draw.rect(screen, "#0d1117",
-                         [270, 220, 360, 110], 0, 10)
+        pygame.draw.rect(screen, "#d52b1e",
+                         [225, 390, 450, 90], 0, 10)
         gameover_text = font.render(
-            'Game over! Space bar to restart!', True, '#d52b1e')
-        screen.blit(gameover_text, (290, 265))
+            'Game Over! Click the Space Bar to Restart', True, '#000000')
+        screen.blit(gameover_text, (240, 430))
     if game_won:
-        pygame.draw.rect(screen, '#00e6fc',
-                         [265, 215, 370, 120], 0, 10)
-        pygame.draw.rect(screen, '#151515',
-                         [270, 220, 360, 110], 0, 10)
+        pygame.draw.rect(screen, "#339c21",
+                         [225, 390, 450, 90], 0, 10)
         gameover_text = font.render(
-            'Victory! Space bar to restart!', True, '#00ff00')
-        screen.blit(gameover_text, (307, 265))
+            'Victory! Click the Space Bar to Restart', True, '#000000')
+        screen.blit(gameover_text, (240, 430))
 def check_collisions(scor, power, power_count, eaten_ghosts):
     num1 = (HEIGHT - 50) // 32
     num2 = WIDTH // 30
@@ -850,7 +848,7 @@ if __name__ == '__main__':
     fps = 60
     font = pygame.font.Font('freesansbold.ttf', 20)
     level = copy.deepcopy(borders)
-    color = '#0000cc'
+    color = '#FFFFFF'
     PI = math.pi
     player_images = []
     for i in range(1, 5):
@@ -913,6 +911,8 @@ if __name__ == '__main__':
     run = True
     while run:
         timer.tick(fps)
+        screen.blit(background_img, (0, 0))
+
         if counter < 19:
             counter += 1
             if counter > 3:
@@ -959,8 +959,13 @@ if __name__ == '__main__':
         for i in range(len(level)):
             if 1 in level[i] or 2 in level[i]:
                 game_won = False
-        player_circle = pygame.draw.circle(screen, '#0d1117',
-                                           (center_x, center_y), 20, 2)
+        player_circle_surface = pygame.Surface((50,50), pygame.SRCALPHA)
+        transparent_color = (13, 17, 23, 0)
+        player_radius = 20
+        player_circle = pygame.draw.circle(player_circle_surface, transparent_color, (25, 25), 20)
+        player_rect = pygame.Rect(center_x - player_radius, center_y - player_radius, player_radius * 2, player_radius * 2)
+        
+        screen.blit(player_circle_surface, (center_x - 25, center_y - 25))
         draw_player()
         red = Ghost(red_x, red_y, targets[0],
                     ghost_speeds[0], red_img,
@@ -1001,12 +1006,12 @@ if __name__ == '__main__':
             score, powerup,
             power_counter, eaten_ghost)
         if not powerup:
-            if (player_circle.colliderect(
+            if (player_rect.colliderect(
                 red.rect) and not red.dead) or \
-                    (player_circle.colliderect(
+                    (player_rect.colliderect(
                         blue.rect) and not blue.dead) or \
-                    (player_circle.colliderect(green.rect) and not green.dead) or \
-                    (player_circle.colliderect(yellow.rect) and not yellow.dead):
+                    (player_rect.colliderect(green.rect) and not green.dead) or \
+                    (player_rect.colliderect(yellow.rect) and not yellow.dead):
                 if lives > 0:
                     lives -= 1
                     startup_counter = 0
@@ -1038,7 +1043,7 @@ if __name__ == '__main__':
                     game_over = True
                     moving = False
                     startup_counter = 0
-        if powerup and player_circle.colliderect(red.rect) and\
+        if powerup and player_rect.colliderect(red.rect) and\
                 eaten_ghost[0] and not red.dead:
             if lives > 0:
                 powerup = False
@@ -1071,7 +1076,7 @@ if __name__ == '__main__':
                 game_over = True
                 moving = False
                 startup_counter = 0
-        if powerup and player_circle.colliderect(blue.rect) and\
+        if powerup and player_rect.colliderect(blue.rect) and\
                 eaten_ghost[1] and not blue.dead:
             if lives > 0:
                 powerup = False
@@ -1104,7 +1109,7 @@ if __name__ == '__main__':
                 game_over = True
                 moving = False
                 startup_counter = 0
-        if powerup and player_circle.colliderect(green.rect) and\
+        if powerup and player_rect.colliderect(green.rect) and\
                 eaten_ghost[2] and not green.dead:
             if lives > 0:
                 powerup = False
@@ -1137,7 +1142,7 @@ if __name__ == '__main__':
                 game_over = True
                 moving = False
                 startup_counter = 0
-        if powerup and player_circle.colliderect(yellow.rect) and\
+        if powerup and player_rect.colliderect(yellow.rect) and\
                 eaten_ghost[3] and not yellow.dead:
             if lives > 0:
                 powerup = False
@@ -1170,22 +1175,22 @@ if __name__ == '__main__':
                 game_over = True
                 moving = False
                 startup_counter = 0
-        if powerup and player_circle.colliderect(red.rect) and not\
+        if powerup and player_rect.colliderect(red.rect) and not\
                 red.dead and not eaten_ghost[0]:
             red_dead = True
             eaten_ghost[0] = True
             score += (2 ** eaten_ghost.count(True)) * 100
-        if powerup and player_circle.colliderect(blue.rect) and not\
+        if powerup and player_rect.colliderect(blue.rect) and not\
                 blue.dead and not eaten_ghost[1]:
             blue_dead = True
             eaten_ghost[1] = True
             score += (2 ** eaten_ghost.count(True)) * 100
-        if powerup and player_circle.colliderect(green.rect) and not\
+        if powerup and player_rect.colliderect(green.rect) and not\
                 green.dead and not eaten_ghost[2]:
             green_dead = True
             eaten_ghost[2] = True
             score += (2 ** eaten_ghost.count(True)) * 100
-        if powerup and player_circle.colliderect(yellow.rect) and not\
+        if powerup and player_rect.colliderect(yellow.rect) and not\
                 yellow.dead and not eaten_ghost[3]:
             yellow_dead = True
             eaten_ghost[3] = True
