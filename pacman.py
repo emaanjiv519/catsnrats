@@ -3,11 +3,8 @@ import math
 import copy
 from borders import *
 
-pellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/cheesepellet.png'), (30, 25))
-superpellet_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/apple.png'), (30, 30))
-
-background_img = pygame.image.load('C:/Users/emaan/pacman/img/background.JPG')
-background_img = pygame.transform.scale(background_img, (900, 950))
+cheese_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/cheesepellet.png'), (30, 25))
+superapple_img = pygame.transform.scale(pygame.image.load('C:/Users/emaan/pacman/img/apple.png'), (30, 30))
 
 class cat:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, box, id):
@@ -40,13 +37,10 @@ class cat:
         num3 = 15
         self.turns = [False, False, False, False]
         if 0 < self.center_x // 30 < 29:
-            if level[(self.center_y - num3) //
-                     num1][self.center_x // num2] == 9:
+            if level[(self.center_y - num3) // num1][self.center_x // num2] == 9:
                 self.turns[2] = True
-            if level[self.center_y //
-                     num1][(self.center_x - num3) // num2] < 3 \
-                    or (level[self.center_y //
-                              num1][(self.center_x - num3) // num2] == 9 and (
+            if level[self.center_y // num1][(self.center_x - num3) // num2] < 3 \
+                    or (level[self.center_y // num1][(self.center_x - num3) // num2] == 9 and (
                     self.in_box or self.dead)):
                 self.turns[1] = True
             if level[self.center_y //
@@ -608,7 +602,7 @@ class cat:
         elif self.x_pos > 900:
             self.x_pos -= 30
         return self.x_pos, self.y_pos, self.direction
-def draw_misc():
+def draw_others():
     score_text = font.render(f'Score: {score}', True, '#00e6fc')
     screen.blit(score_text, (10, 920))
     if powerup:
@@ -628,29 +622,29 @@ def draw_misc():
         gameover_text = font.render(
             'Victory! Click the Space Bar to Restart', True, '#000000')
         screen.blit(gameover_text, (240, 430))
-def check_collisions(scor, power, power_count, eaten_cats):
+def check_collisions(score_inc, power, power_count, eaten_cats):
     num1 = (HEIGHT - 50) // 32
     num2 = WIDTH // 30
     if 0 < player_x < 870:
         if level[center_y // num1][center_x // num2] == 1:
             level[center_y // num1][center_x // num2] = 0
-            scor += 10
+            score_inc += 10
         if level[center_y // num1][center_x // num2] == 2:
             level[center_y // num1][center_x // num2] = 0
-            scor += 50
+            score_inc += 50
             power = True
             power_count = 0
             eaten_cats = [False, False, False, False]
-    return scor, power, power_count, eaten_cats
+    return score_inc, power, power_count, eaten_cats
 def draw_borders():
     num1 = ((HEIGHT - 50) // 32)
     num2 = (WIDTH // 30)
     for i in range(len(level)):
         for j in range(len(level[i])):
             if level[i][j] == 1:
-                screen.blit(pellet_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
+                screen.blit(cheese_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
             if level[i][j] == 2 and not flicker:
-                screen.blit(superpellet_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
+                screen.blit(superapple_img, (j * num2 + (0.5 * num2) - 10, i * num1 + (0.5 * num1) - 10))
             if level[i][j] == 3:
                 pygame.draw.line(screen, color,
                                  (j * num2 + (0.5 * num2),
@@ -911,7 +905,6 @@ if __name__ == '__main__':
     run = True
     while run:
         timer.tick(fps)
-        screen.blit(background_img, (0, 0))
 
         if counter < 19:
             counter += 1
@@ -983,7 +976,7 @@ if __name__ == '__main__':
                        cat_speeds[3], yellow_img,
                        yellow_direction, yellow_dead,
                        yellow_box, 3)
-        draw_misc()
+        draw_others()
         targets = get_targets(orange_x, orange_y, purple_x, purple_y,
                               blue_x, blue_y, yellow_x, yellow_y)
         turns_allowed = check_position(center_x, center_y)
