@@ -625,7 +625,8 @@ class cat:
             self.x_pos -= 30
         return self.x_pos, self.y_pos, self.direction
     
-# this function draws miscellaneous things like the scoring text, images of rat as lives, lives left and game over and victory screens
+# this function draws miscellaneous things like the scoring text, images of rat as lives, lives 
+# left and game over and victory screens
 def draw_misc():
     # displays score
     score_text = font.render(f'Score: {score}', True, '#00e6fc')
@@ -1037,7 +1038,6 @@ if __name__ == '__main__':
         rat_transparant_margin = pygame.Surface((50,50), pygame.SRCALPHA)
         transparent_color = (13, 17, 23, 0)
         rat_radius = 20
-        rat_circle = pygame.draw.circle(rat_transparant_margin, transparent_color, (25, 25), 20)
         rat_rect = pygame.Rect(center_x - rat_radius, center_y - rat_radius, rat_radius * 2, rat_radius * 2)
         screen.blit(rat_transparant_margin, (center_x - 25, center_y - 25))
         
