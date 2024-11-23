@@ -26,9 +26,11 @@ Features
     - Use arrow keys to move the rat
     - Use the spacebar to start the game
 
- Acknoledgements
- We'd like to thank our professor and peers for their guidance and feedback throughout this project. 
- Resources like StackOverflow, Youtube tutorials, and the Pygame documentation helped us overcome challenges and bring this game to life.
+  Acknowledgements
+  
+  We'd like to thank our professor and peers for their guidance and feedback throughout
+  this project. Resources like StackOverflow, Youtube tutorials, and the Pygame
+  documentation helped us overcome challenges and bring this game to life.
 
   
 
